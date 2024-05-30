@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+	<title> Aide aux requetes API de GLPI </title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+----------URL-----------------
+<div id="lediv"> </div>
+------------------------------
+<p> Itemtype à chercher : <input id="itemtype"> </p>
+
+<p> Critères de recherche </p>
+<table id="criterias">
+<tr><th>Link</th><th>Meta</th><th>Itemtype (meta)</th><th>Field</th><th>Value</th></tr>
+<tr><td><select name="link"><option value="0"></option><option value="AND">AND</option><option value="OR">OR</option></select></td><td><select name="meta"><option value="0"></option><option value="1">true</option></select></td><td><input></td><td><input></td><td><input></td></tr>
+<tr><td><select name="link"><option value="0"></option><option selected value="AND">AND</option><option value="OR">OR</option></select></td><td><select name="meta"><option value="0"></option><option value="1">true</option></select></td><td><input></td><td><input></td><td><input></td></tr>
+<tr><td><select name="link"><option value="0"></option><option selected value="AND">AND</option><option value="OR">OR</option></select></td><td><select name="meta"><option value="0"></option><option value="1">true</option></select></td><td><input></td><td><input></td><td><input></td></tr>
+<tr><td><select name="link"><option value="0"></option><option selected value="AND">AND</option><option value="OR">OR</option></select></td><td><select name="meta"><option value="0"></option><option value="1">true</option></select></td><td><input></td><td><input></td><td><input></td></tr>
+<tr><td><select name="link"><option value="0"></option><option selected value="AND">AND</option><option value="OR">OR</option></select></td><td><select name="meta"><option value="0"></option><option value="1">true</option></select></td><td><input></td><td><input></td><td><input></td></tr>
+<tr><td><select name="link"><option value="0"></option><option selected value="AND">AND</option><option value="OR">OR</option></select></td><td><select name="meta"><option value="0"></option><option value="1">true</option></select></td><td><input></td><td><input></td><td><input></td></tr>
+<tr><td><select name="link"><option value="0"></option><option selected value="AND">AND</option><option value="OR">OR</option></select></td><td><select name="meta"><option value="0"></option><option value="1">true</option></select></td><td><input></td><td><input></td><td><input></td></tr>
+<tr><td><select name="link"><option value="0"></option><option selected value="AND">AND</option><option value="OR">OR</option></select></td><td><select name="meta"><option value="0"></option><option value="1">true</option></select></td><td><input></td><td><input></td><td><input></td></tr>
+<tr><td><select name="link"><option value="0"></option><option selected value="AND">AND</option><option value="OR">OR</option></select></td><td><select name="meta"><option value="0"></option><option value="1">true</option></select></td><td><input></td><td><input></td><td><input></td></tr>
+</table>
+
+<p> Champs forcés </p>
+<ul id="forcedisplays">
+<li><input></li><li><input></li><li><input></li><li><input></li><li><input></li><li><input></li><li><input></li><li><input></li>
+</ul>
+
+</table>
+
+<button onclick="generequete()">Générer</button>
+
+<script>
+
+function generequete(){
+	var urlbase = "http://127.0.0.1/glpi/apirest.php/search/";
+
+	var lignes_criteres = document.getElementById("criterias").getElementsByTagName("tr");
+	var args = [];
+
+	l = 0;
+	for (ligne of lignes_criteres){
+		if (l > 0){
+			var cellules = ligne.getElementsByTagName("td");
+			if (cellules[4].children[0].value != ""){
+				cid = l-1;
+				if (cellules[0].children[0].value != 0){
+					args.push("criteria[" + cid + "]" + "[link]=" + cellules[0].children[0].value);
+				}
+				if (cellules[1].children[0].value != 0){
+					args.push("criteria[" + cid + "]" + "[meta]=true");
+					args.push("criteria[" + cid + "]" + "[itemtype]=" + cellules[2].children[0].value);
+				}
+				args.push("criteria[" + cid + "]" + "[field]=" + cellules[3].children[0].value);
+				args.push("criteria[" + cid + "]" + "[searchtype]=contains");
+				args.push("criteria[" + cid + "]" + "[value]=" + cellules[4].children[0].value);
+			}else{
+				break;
+			}
+		}
+		l++;
+	}
+	
+	var lignes_forced = document.getElementById("forcedisplays").getElementsByTagName("li");
+	
+	fid = 0;
+	for (ligne of lignes_forced){
+		if (ligne.children[0].value != ""){
+			args.push("forcedisplay[" + fid + "]=" + ligne.children[0].value);
+		}else{
+			break;
+		}
+		fid++;
+	}
+	
+	var lediv = document.getElementById("lediv");
+	lediv.innerHTML = "";
+	
+	var url = urlbase + document.getElementById("itemtype").value + "?";
+	var params = "";
+	
+	aid = 0;
+	for (arg of args){
+		if (aid == 0){
+			params = arg;
+		}else{
+			params = params + "&" + arg;
+		}
+		aid++;
+	}
+	
+	params = params.replace(/\[/g,"\\[");
+	params = params.replace(/\]/g,"\\]");
+	params = params.replace(/=/g,"\\=");
+	
+	url = url + params;
+	lediv.innerHTML = document.getElementById("lediv").innerHTML + '"' + url + '"';
+	
+}
+
+</script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+body {
+	font-size: xx-small;
+}
+
+table {
+	table-layout: fixed;
+	width: 100%;
+}
+
+td, th {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+}
+
+tr > :first-child {
+      width: 100px;
+}
+
+th {
+    writing-mode: vertical-lr;
+}
+
+th:first-child {
+    writing-mode: horizontal-tb;
+
+}
